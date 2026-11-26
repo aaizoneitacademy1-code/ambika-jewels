@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ambika Jewellery | Luxury Experience</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Georgia,serif;background:#080808;color:#fff;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(circle at 20% 30%,#8b651c22,transparent 35%),radial-gradient(circle at 80% 70%,#d4af3720,transparent 35%);z-index:-1}
+header{padding:28px 8%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d8b65b40}
+.logo{font-size:27px;letter-spacing:3px;color:#e6c56e;font-weight:bold}
+.logo span{display:block;font-size:10px;text-align:center;letter-spacing:6px;margin-top:5px;color:#fff}
+.nav-status{font-family:Arial,sans-serif;color:#7cff9b;font-size:13px;letter-spacing:2px}
+.dot{display:inline-block;width:8px;height:8px;background:#3cff7c;border-radius:50%;margin-right:8px;box-shadow:0 0 12px #3cff7c;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.3}}
+.hero{min-height:82vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:60px 20px;position:relative}
+.eyebrow{color:#d8b65b;letter-spacing:6px;font-size:12px;margin-bottom:25px;font-family:Arial,sans-serif}
+h1{font-size:clamp(40px,7vw,85px);font-weight:normal;letter-spacing:5px;color:#e8cc83;text-shadow:0 0 35px #d8b65b55}
+.subtitle{font-size:16px;color:#c5bda9;letter-spacing:2px;margin-top:20px;line-height:1.8}
+.line{width:120px;height:1px;background:linear-gradient(90deg,transparent,#e4bf5e,transparent);margin:35px auto}
+.countdown-title{color:#fff;font-family:Arial,sans-serif;font-size:12px;letter-spacing:4px;margin-bottom:25px}
+.timer{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.time-box{width:125px;padding:25px 10px;border:1px solid #b9984c;background:linear-gradient(145deg,#1a1710,#090909);box-shadow:0 0 25px #d8b65b18;border-radius:8px;transition:.3s}
+.time-box:hover{transform:translateY(-7px);box-shadow:0 0 30px #d8b65b55}
+.time-box h2{font-family:Arial,sans-serif;font-size:42px;color:#e8c66d}
+.time-box p{font-family:Arial,sans-serif;font-size:10px;letter-spacing:3px;color:#aaa;margin-top:12px}
+#message{margin-top:30px;font-family:Arial,sans-serif;color:#d8b65b;letter-spacing:2px;font-size:13px}
+.progress-container{width:min(400px,85vw);height:4px;background:#29251b;margin-top:25px;border-radius:10px;overflow:hidden}
+.progress{height:100%;width:100%;background:linear-gradient(90deg,#8b651c,#ffe39b);transition:width 1s linear}
+footer{border-top:1px solid #d8b65b30;padding:25px;text-align:center;color:#777;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px}
+.particle{position:fixed;width:4px;height:4px;background:#e4bf5e;border-radius:50%;box-shadow:0 0 12px #e4bf5e;animation:float 8s infinite linear;opacity:.5;pointer-events:none}
+@keyframes float{0%{transform:translateY(100vh) scale(.5);opacity:0}50%{opacity:.8}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}
+@media(max-width:600px){header{padding:22px 5%}.logo{font-size:19px}.nav-status{font-size:9px}.time-box{width:90px;padding:18px 5px}.time-box h2{font-size:30px}.timer{gap:9px}.subtitle{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">AMBIKA JEWELLERY<span>THE ART OF ELEGANCE</span></div>
+  <div class="nav-status" id="serverStatus"><span class="dot"></span>SERVER ACTIVE</div>
+</header>
+<main class="hero">
+  <div class="eyebrow">EXCLUSIVE LUXURY EXPERIENCE</div>
+  <h1>Ambika Jewellery</h1>
+  <p class="subtitle">Elegance That Lasts Forever.<br>Experience the Beauty of Timeless Luxury.</p>
+  <div class="line"></div>
+  <div class="countdown-title">SERVER ACTIVE TIME REMAINING</div>
+  <div class="timer">
+    <div class="time-box"><h2 id="hours">03</h2><p>HOURS</p></div>
+    <div class="time-box"><h2 id="minutes">00</h2><p>MINUTES</p></div>
+    <div class="time-box"><h2 id="seconds">00</h2><p>SECONDS</p></div>
+  </div>
+  <div class="progress-container"><div class="progress" id="progress"></div></div>
+  <div id="message">YOUR SERVER IS RUNNING SUCCESSFULLY</div>
+</main>
+<footer>© 2026 AMBIKA JEWELLERY | ALL RIGHTS RESERVED</footer>
+<script>
+const DURATION=3*60*60*1000;
+let endTime=localStorage.getItem("ambikaServerEnd");
+if(!endTime||Number(endTime)<=Date.now()){
+  endTime=Date.now()+DURATION;
+  localStorage.setItem("ambikaServerEnd",endTime);
+}
+endTime=Number(endTime);
+function updateCountdown(){
+  const remaining=Math.max(0,endTime-Date.now());
+  const hours=Math.floor(remaining/3600000);
+  const minutes=Math.floor((remaining%3600000)/60000);
+  const seconds=Math.floor((remaining%60000)/1000);
+  document.getElementById("hours").textContent=String(hours).padStart(2,"0");
+  document.getElementById("minutes").textContent=String(minutes).padStart(2,"0");
+  document.getElementById("seconds").textContent=String(seconds).padStart(2,"0");
+  document.getElementById("progress").style.width=(remaining/DURATION*100)+"%";
+  if(remaining<=0){
+    document.getElementById("message").textContent="SERVER SESSION EXPIRED";
+    document.getElementById("serverStatus").innerHTML='<span style="color:#ff5b5b">● SERVER EXPIRED</span>';
+    clearInterval(timer);
+  }
+}
+updateCountdown();
+const timer=setInterval(updateCountdown,1000);
+for(let i=0;i<25;i++){
+  const particle=document.createElement("div");
+  particle.className="particle";
+  particle.style.left=Math.random()*100+"%";
+  particle.style.animationDelay=Math.random()*8+"s";
+  particle.style.animationDuration=(5+Math.random()*8)+"s";
+  document.body.appendChild(particle);
+}
+</script>
+</body>
+</html>
